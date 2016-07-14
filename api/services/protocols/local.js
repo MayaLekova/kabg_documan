@@ -134,6 +134,8 @@ exports.connect = function (req, res, next) {
  * @param {Function} next
  */
 exports.login = function (req, identifier, password, next) {
+  console.log('Calling local.login');
+
   var isEmail = validator.isEmail(identifier)
     , query   = {};
 

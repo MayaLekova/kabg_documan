@@ -63,6 +63,7 @@ passport.protocols = require('./protocols');
  * @param {Function} next
  */
 passport.connect = function (req, query, profile, next) {
+  console.log('connect');
   var user = {}
     , provider;
 
@@ -318,6 +319,7 @@ passport.loadStrategies = function () {
         case 'oauth':
         case 'oauth2':
           options.callbackURL = url.resolve(baseUrl, callback);
+          console.log('oatuh2 with callback', options.callbackURL);
           break;
 
         case 'openid':

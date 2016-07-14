@@ -56,16 +56,16 @@ module.exports.passport = {
   //   }
   // },
 
-  google: {
-    name: 'Google',
-    protocol: 'oauth2',
-    strategy: require('passport-google-oauth').OAuth2Strategy,
-    options: {
-      clientID: locals.google.clientID,
-      clientSecret: locals.google.clientSecret,
-      scope: 'https://www.googleapis.com/auth/plus.login'
-    }
-  },
+  // google: {
+  //   name: 'Google',
+  //   protocol: 'oauth2',
+  //   strategy: require('passport-google-oauth').OAuth2Strategy,
+  //   options: {
+  //     clientID: locals.google.clientID,
+  //     clientSecret: locals.google.clientSecret,
+  //     scope: 'https://www.googleapis.com/auth/plus.login'
+  //   }
+  // },
 
   // cas: {
   //   name: 'CAS',
