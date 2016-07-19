@@ -56,5 +56,8 @@ module.exports.routes = {
   'get /auth/:provider': 'AuthController.provider',
   'get /auth/:provider/callback': 'AuthController.callback',
 
-  'get /me': 'UserController.get'
+  'get /me': 'UserController.get',
+
+  'post /upload': 'DocumentController.upload',
+  'get /documents': 'DocumentController.list',
 };
