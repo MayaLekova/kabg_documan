@@ -24,6 +24,16 @@ module.exports = {
    */
   get: function (req, res) {
     return res.json(req.user);
+  },
+
+  /**
+   * `UserController.homepage()`
+   */
+  homepage: function (req, res) {
+    return res.view('homepage', {
+      user: req.user,
+      youAreUsingJade: true
+    });
   }
 };
 

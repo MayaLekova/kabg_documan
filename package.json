@@ -41,5 +41,8 @@
     "url": "git://github.com/anonymous node/sails user/kabg_documan.git"
   },
   "author": "anonymous node/sails user",
-  "license": ""
+  "license": "",
+  "devDependencies": {
+    "jade": "^1.11.0"
+  }
 }
