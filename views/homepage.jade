@@ -2,12 +2,16 @@ doctype html
 html(lang="en")
   head
     title= pageTitle
-    script(type='text/javascript').
-      if (foo) {
-         bar(1 + 5)
-      }
   body
     h1= 'Здравей, ' + user.username
+    #notifications.col
+      p Откакто те нямаше, в системата се случи следното:
+      ul
+        each notif in notifications
+          li
+            = notif.text
+            |  
+            a(href='/get_document/' + notif.path) Свали
     #container.col
       if youAreUsingJade
         p Твоите качени документи:

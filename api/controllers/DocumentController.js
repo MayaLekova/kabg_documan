@@ -33,11 +33,24 @@ module.exports = {
             "path" : path.basename(files[0].fd),
             "type" : req.query.type
           })
-          .exec(function createCB(err, created){
+          .exec(function (err, created){
             if(err) console.error(err);
-            return res.json({
-              message: files.length + ' file(s) uploaded successfully!',
-              files: files
+            Notifications.create(
+            [{
+              text: 'Потребителят ' + req.user.username + ' създаден нов(а) ' + req.query.type,
+              path: path.basename(files[0].fd),
+              toUser: 'Maya'  // TODO: add all system admins from local.js
+            }, 
+            {
+              text: 'Потребителят ' + req.user.username + ' създаден нов(а) ' + req.query.type,
+              path: path.basename(files[0].fd),
+              toUser: 'Stanislava'
+            }]).exec(function (err, notifsCreated) {
+              if(err) console.error(err);
+              return res.json({
+                message: files.length + ' file(s) uploaded successfully!',
+                files: files
+              });
             });
           });
       }

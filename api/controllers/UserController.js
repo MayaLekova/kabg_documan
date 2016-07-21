@@ -30,12 +30,20 @@ module.exports = {
    * `UserController.homepage()`
    */
   homepage: function (req, res) {
-    Document.find({owner: req.user.username}, function(err, data) {
-      return res.view('homepage', {
-        user: req.user,
-        youAreUsingJade: true,
-        documents: data
-      });
+    Document.find({owner: req.user.username}, function(err, docs) {
+      if(err)
+        return res.serverError(err);
+      Notifications.find({toUser: req.user.username}, function(err, notifications) {
+        if(err)
+          return res.serverError(err);
+        
+        return res.view('homepage', {
+          user: req.user,
+          youAreUsingJade: true,
+          documents: docs,
+          notifications: notifications
+        });        
+      })
     });
   }
 };
