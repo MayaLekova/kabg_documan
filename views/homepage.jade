@@ -7,14 +7,30 @@ html(lang="en")
          bar(1 + 5)
       }
   body
-    h1= 'Welcome, ' + user.username
+    h1= 'Здравей, ' + user.username
     #container.col
       if youAreUsingJade
-        p Your documents are:
+        p Твоите качени документи:
       else
-        p Error while getting documents
+        p Грешка при изтегляне на документите
       ul
         each doc in documents
           li
             a(href='/get_document/' + doc.path)= doc.name
-
+    #submit
+      .col
+        form(action="http://localhost:1337/document/upload?type=contract",enctype="multipart/form-data",method="post")
+          input(type="file", name="document", multiple="multiple")
+          input(type="submit", value="Качи договор")
+      .col
+        form(action="http://localhost:1337/document/upload?type=declaration",enctype="multipart/form-data",method="post")
+          input(type="file", name="document", multiple="multiple")
+          input(type="submit", value="Качи декларация")
+      .col
+        form(action="http://localhost:1337/document/upload?type=order",enctype="multipart/form-data",method="post")
+          input(type="file", name="document", multiple="multiple")
+          input(type="submit", value="Качи поръчка")
+      .col
+        form(action="http://localhost:1337/document/upload?type=protocol",enctype="multipart/form-data",method="post")
+          input(type="file", name="document", multiple="multiple")
+          input(type="submit", value="Качи протокол")

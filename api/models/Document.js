@@ -8,8 +8,9 @@
 module.exports = {
 
   attributes: {
-    name  : { type: 'string', required: true, unique: true },
+    name  : { type: 'string', required: true },
     path  : { type: 'string', required: true },
+    type  : { type: 'string', required: true },
     owner : { model: 'User', required: true },
   }
 };
