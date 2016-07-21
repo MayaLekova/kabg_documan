@@ -6,6 +6,10 @@
  */
 
 module.exports = {
-	
+	dismiss(req, res) {
+		Notifications.update(req.params.id, {dismissed:true}, function(err) {
+			res.redirect('/');
+		});
+	}
 };
 

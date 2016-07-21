@@ -47,6 +47,8 @@ module.exports = {
               toUser: 'Stanislava'
             }]).exec(function (err, notifsCreated) {
               if(err) console.error(err);
+              return res.redirect('/');
+
               return res.json({
                 message: files.length + ' file(s) uploaded successfully!',
                 files: files

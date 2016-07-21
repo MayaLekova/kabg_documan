@@ -12,6 +12,8 @@ html(lang="en")
             = notif.text
             |  
             a(href='/get_document/' + notif.path) Свали
+            |  
+            a(href='/dismiss/' + notif.id) Скрий
     #container.col
       if youAreUsingJade
         p Твоите качени документи:

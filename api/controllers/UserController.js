@@ -33,10 +33,10 @@ module.exports = {
     Document.find({owner: req.user.username}, function(err, docs) {
       if(err)
         return res.serverError(err);
-      Notifications.find({toUser: req.user.username}, function(err, notifications) {
+      Notifications.find({toUser: req.user.username, dismissed: false}, function(err, notifications) {
         if(err)
           return res.serverError(err);
-        
+
         return res.view('homepage', {
           user: req.user,
           youAreUsingJade: true,

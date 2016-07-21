@@ -59,4 +59,6 @@ module.exports.routes = {
   'post /upload': 'DocumentController.upload',
   'get /documents': 'DocumentController.list',
   'get /get_document/:doc_path': 'DocumentController.download',
+
+  'get /dismiss/:id': 'NotificationsController.dismiss',
 };
