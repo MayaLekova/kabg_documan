@@ -7,6 +7,14 @@
 
 var path = require('path');
 var fs = require('fs');
+var local = require('../../config/local.js')
+
+var docTypeToReadable = {
+  "contract": "договор",
+  "declaration": "декларация",
+  "order": "поръчка",
+  "protocol": "протокол",
+}
 
 module.exports = {
   /**
@@ -35,24 +43,20 @@ module.exports = {
           })
           .exec(function (err, created){
             if(err) console.error(err);
-            Notifications.create(
-            [{
-              text: 'Потребителят ' + req.user.username + ' създаден нов(а) ' + req.query.type,
-              path: path.basename(files[0].fd),
-              toUser: 'Maya'  // TODO: add all system admins from local.js
-            }, 
-            {
-              text: 'Потребителят ' + req.user.username + ' създаден нов(а) ' + req.query.type,
-              path: path.basename(files[0].fd),
-              toUser: 'Stanislava'
-            }]).exec(function (err, notifsCreated) {
+            Notifications.create(local.admins.map(function(adminName) {
+              return {
+                text: 'Потребителят ' + req.user.username + ' качи нов(а) ' + docTypeToReadable[req.query.type],
+                path: path.basename(files[0].fd),
+                toUser: adminName
+              }
+            })).exec(function (err, notifsCreated) {
               if(err) console.error(err);
               return res.redirect('/');
 
-              return res.json({
-                message: files.length + ' file(s) uploaded successfully!',
-                files: files
-              });
+              // return res.json({
+              //   message: files.length + ' file(s) uploaded successfully!',
+              //   files: files
+              // });
             });
           });
       }

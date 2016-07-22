@@ -29,6 +29,5 @@ module.exports = function (req, accessToken, refreshToken, profile, next) {
     query.tokens.refreshToken = refreshToken;
   }
 
-  console.log('Calling passport.connect from Oauth2');
   passport.connect(req, query, profile, next);
 };
