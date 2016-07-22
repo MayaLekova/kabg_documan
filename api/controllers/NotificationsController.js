@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-	dismiss(req, res) {
+	dismiss: function(req, res) {
 		Notifications.update(req.params.id, {dismissed:true}, function(err) {
 			res.redirect('/');
 		});
