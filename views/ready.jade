@@ -1,0 +1,11 @@
+doctype html
+html(lang="en")
+  head
+    title= pageTitle
+  body
+    #container.col
+      p Документи, които са подписани, изпратени и платени:
+      ul
+        each doc in documents
+          li
+            a(href='/get_document/' + doc.path)= doc.name + ' от потребител ' + doc.owner

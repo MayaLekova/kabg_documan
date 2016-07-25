@@ -1,0 +1,13 @@
+doctype html
+html(lang="en")
+  head
+    title= pageTitle
+  body
+    #container.col
+      p Документи, чакащи плащане:
+      ul
+        each doc in documents
+          li
+            a(href='/get_document/' + doc.path)= doc.name
+            |  
+            a(href='/pay_document/' + doc.id) Означи като платен

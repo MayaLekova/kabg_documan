@@ -8,7 +8,7 @@
 var path = require('path');
 var fs = require('fs');
 var local = require('../../config/local.js');
-var ObjectId = require('mongodb').ObjectID
+var ObjectId = require('mongodb').ObjectID;
 
 var docTypeToReadable = {
   "contract": "договор",
@@ -38,25 +38,29 @@ module.exports = {
       if(files.length >= 1) {
         Document.create(
           { name : files[0].filename,
-            owner : req.user.username,
+            owner : (req.query.originalOwner ? req.query.originalOwner : req.user.username),
             path : path.basename(files[0].fd),
             type : req.query.type,
             signedByUser: true,
             signedByAdmin: !!req.query.signedByAdmin,
           })
           .exec(function (err, created){
-            if(err) console.error(err);
-            Notifications.create(local.admins.map(function(adminName) {
-              return {
-                text: 'Потребителят ' + req.user.username + ' качи нов(а) ' + docTypeToReadable[req.query.type],
-                path: path.basename(files[0].fd),
-                toUser: adminName,
-                doc_id: created.id,
-              }
-            })).exec(function (err, notifsCreated) {
-              if(err) console.error(err);
+            if(err) return console.error(err);
+            if(!created.signedByAdmin) {
+              Notifications.create(local.admins.map(function(adminName) {
+                return {
+                  text: 'Потребителят ' + req.user.username + ' качи нов(а) ' + docTypeToReadable[req.query.type],
+                  path: path.basename(files[0].fd),
+                  toUser: adminName,
+                  doc_id: created.id,
+                };
+              })).exec(function (err, notifsCreated) {
+                if(err) console.error(err);
+                return res.redirect('/');
+              });
+            } else {
               return res.redirect('/');
-            });
+            }
           });
       }
     });
@@ -82,6 +86,43 @@ module.exports = {
     } catch(err) {
         return res.serverError(err);
     }
+  },
+
+  send: function (req, res) {
+    Document.update({ id: req.params.doc_id }, { sent: true }).exec(function(err, updated) {
+      if(err) {
+        return res.serverError(err);
+      }
+      return res.redirect('/');
+    });
+  },
+
+  pay: function (req, res) {
+    Document.update({ id: req.params.doc_id }, { paid: true }).exec(function(err, updated) {
+      if(err) {
+        return res.serverError(err);
+      }
+      return res.redirect('/');
+    });
+  },
+  
+  unsent: function (req, res) {
+    Document.find({ sent: false, signedByAdmin: true }).exec(function(err, found) {
+      return res.view('unsent', { documents: found });
+    });
+  },
+  
+  unpaid: function (req, res) {
+    Document.find({ paid: false, signedByAdmin: true }).exec(function(err, found) {
+      return res.view('unpaid', { documents: found });
+    });
+  },
+  
+  ready: function (req, res) {
+    Document.find({ paid: true, sent: true, signedByAdmin: true }).exec(function(err, found) {
+      return res.view('ready', { documents: found });
+    });
   }
+
 };
 

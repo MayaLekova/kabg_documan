@@ -5,6 +5,8 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
+var local = require('../../config/local.js');
+
 module.exports = {
 	
 
@@ -41,7 +43,8 @@ module.exports = {
           user: req.user,
           youAreUsingJade: true,
           documents: docs,
-          notifications: notifications
+          notifications: notifications,
+          admin: local.admins.indexOf(req.user.username) >= 0
         });        
       })
     });

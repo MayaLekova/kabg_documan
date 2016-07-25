@@ -4,6 +4,6 @@ html(lang="en")
     title= pageTitle
   body
     h1= 'Обновяване на документ ' + doc.name + ' от потребител ' + doc.owner
-    form(action="/document/upload?type=" + doc.type + "&signedByAdmin=1",enctype="multipart/form-data",method="post")
+    form(action="/document/upload?type=" + doc.type + "&signedByAdmin=1&originalOwner=" + doc.owner, enctype="multipart/form-data", method="post")
       input(type="file", name="document", multiple="multiple")
       input(type="submit", value="Обнови")

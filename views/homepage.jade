@@ -14,14 +14,21 @@ html(lang="en")
             a(href='/get_document/' + notif.path) Свали
             |  
             a(href='/dismiss/' + notif.id) Скрий
-            |  
-            a(href='/update_document/' + notif.doc_id) Обнови документ
+            if admin
+              |  
+              a(href='/update_document/' + notif.doc_id) Обнови документ
     #container.col
       p Твоите качени документи:
       ul
         each doc in documents
           li
             a(href='/get_document/' + doc.path)= doc.name
+      if admin
+        a(href='/unsent_documents') Виж всички за изпращане в счетоводството
+        br
+        a(href='/unpaid_documents') Виж всички за плащане
+        br
+        a(href='/ready_documents') Виж всички готови документи
     #submit
       .col
         form(action="/document/upload?type=contract",enctype="multipart/form-data",method="post")

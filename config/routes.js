@@ -60,6 +60,12 @@ module.exports.routes = {
   'get /documents': 'DocumentController.list',
   'get /get_document/:doc_path': 'DocumentController.download',
   'get /update_document/:doc_id': 'DocumentController.update',
+  'get /send_document/:doc_id': 'DocumentController.send',
+  'get /pay_document/:doc_id': 'DocumentController.pay',
+  'get /unsent_documents': 'DocumentController.unsent',
+  'get /unpaid_documents': 'DocumentController.unpaid',
+  'get /ready_documents': 'DocumentController.ready',
 
   'get /dismiss/:id': 'NotificationsController.dismiss',
+
 };

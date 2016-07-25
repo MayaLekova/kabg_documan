@@ -14,6 +14,8 @@ module.exports = {
     owner : { model: 'User', required: true },
     signedByUser : { type: 'boolean' },
     signedByAdmin : { type: 'boolean', defaultsTo: function() { return false; } },
+    sent : { type: 'boolean', defaultsTo: function() { return false; } },
+    paid : { type: 'boolean', defaultsTo: function() { return false; } },
   }
 };
 

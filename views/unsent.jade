@@ -1,0 +1,13 @@
+doctype html
+html(lang="en")
+  head
+    title= pageTitle
+  body
+    #container.col
+      p Документи, чакащи за изпращане към счетоводител:
+      ul
+        each doc in documents
+          li
+            a(href='/get_document/' + doc.path)= doc.name
+            |  
+            a(href='/send_document/' + doc.id) Означи като изпратен
