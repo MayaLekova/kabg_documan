@@ -11,7 +11,8 @@ module.exports = {
     text  : { type: 'string', required: true },
     path  : { type: 'string', required: true },
     dismissed  : { type: 'boolean', defaultsTo: function() { return false; } },
-    toUser : { model: 'User', required: true },
+    toUser : { type: 'string', required: true },
+    doc_id: { model: 'document', required: true }
   }
 };
 

@@ -14,11 +14,10 @@ html(lang="en")
             a(href='/get_document/' + notif.path) Свали
             |  
             a(href='/dismiss/' + notif.id) Скрий
+            |  
+            a(href='/update_document/' + notif.doc_id) Обнови документ
     #container.col
-      if youAreUsingJade
-        p Твоите качени документи:
-      else
-        p Грешка при изтегляне на документите
+      p Твоите качени документи:
       ul
         each doc in documents
           li

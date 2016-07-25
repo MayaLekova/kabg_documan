@@ -12,6 +12,8 @@ module.exports = {
     path  : { type: 'string', required: true },
     type  : { type: 'string', enum: ['contract', 'declaration', 'order', 'protocol'], required: true },
     owner : { model: 'User', required: true },
+    signedByUser : { type: 'boolean' },
+    signedByAdmin : { type: 'boolean', defaultsTo: function() { return false; } },
   }
 };
 

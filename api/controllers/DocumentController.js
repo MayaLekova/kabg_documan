@@ -7,7 +7,8 @@
 
 var path = require('path');
 var fs = require('fs');
-var local = require('../../config/local.js')
+var local = require('../../config/local.js');
+var ObjectId = require('mongodb').ObjectID
 
 var docTypeToReadable = {
   "contract": "договор",
@@ -36,10 +37,12 @@ module.exports = {
 
       if(files.length >= 1) {
         Document.create(
-          {"name" : files[0].filename,
-            "owner" : req.user.username,
-            "path" : path.basename(files[0].fd),
-            "type" : req.query.type
+          { name : files[0].filename,
+            owner : req.user.username,
+            path : path.basename(files[0].fd),
+            type : req.query.type,
+            signedByUser: true,
+            signedByAdmin: !!req.query.signedByAdmin,
           })
           .exec(function (err, created){
             if(err) console.error(err);
@@ -47,19 +50,24 @@ module.exports = {
               return {
                 text: 'Потребителят ' + req.user.username + ' качи нов(а) ' + docTypeToReadable[req.query.type],
                 path: path.basename(files[0].fd),
-                toUser: adminName
+                toUser: adminName,
+                doc_id: created.id,
               }
             })).exec(function (err, notifsCreated) {
               if(err) console.error(err);
               return res.redirect('/');
-
-              // return res.json({
-              //   message: files.length + ' file(s) uploaded successfully!',
-              //   files: files
-              // });
             });
           });
       }
+    });
+  },
+
+  update: function(req, res) {
+    Document.findOne({ id: req.params.doc_id }).exec(function(err, found) {
+      if(err || !found) {
+        return res.serverError(err || new Error('Cannot find such document'));
+      }
+      res.view('update_doc', {doc: found});
     });
   },
 
