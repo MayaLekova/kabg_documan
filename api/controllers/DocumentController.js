@@ -31,7 +31,21 @@ module.exports = {
    * `DocumentController.upload()`
    */
   upload: function  (req, res) {
-    req.file('document').upload(function (err, files) {
+    req.file('document').upload({ saveAs: function(fileStream, cb) {
+      function padTo2(num) {
+        return num <= 9 ? '0' + num : '' + num;
+      }
+
+      var ret = docTypeToReadable[req.query.type] + '_';
+      ret += (req.query.originalOwner ? req.query.originalOwner : req.user.username);
+      ret += '_';
+
+      var d = new Date();
+      ret += (d.getUTCFullYear() + padTo2(d.getUTCMonth()) + padTo2(d.getUTCDate()));
+      ret += path.extname(fileStream.filename);
+      cb(null, ret);
+    } }
+      , function (err, files) {
       if (err)
         return res.serverError(err);
 
