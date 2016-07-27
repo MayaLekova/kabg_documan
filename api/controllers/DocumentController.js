@@ -9,6 +9,7 @@ var path = require('path');
 var fs = require('fs');
 var local = require('../../config/local.js');
 var ObjectId = require('mongodb').ObjectID;
+var uploadFile = require('../../google_auth').upload;
 
 var docTypeToReadable = {
   "contract": "договор",
@@ -50,6 +51,7 @@ module.exports = {
         return res.serverError(err);
 
       if(files.length >= 1) {
+        files[0].filename = path.basename(files[0].fd);
         Document.create(
           { name : files[0].filename,
             owner : (req.query.originalOwner ? req.query.originalOwner : req.user.username),
@@ -60,6 +62,14 @@ module.exports = {
           })
           .exec(function (err, created){
             if(err) return console.error(err);
+
+            uploadFile(files[0], function(err, result) {
+              if(err) {
+                console.error('Error uploading file to Google Drive', err);
+              } else {
+                console.log('Uploaded file to Google Drive:', result);
+              }
+            });
             if(!created.signedByAdmin) {
               Notifications.create(local.admins.map(function(adminName) {
                 return {
