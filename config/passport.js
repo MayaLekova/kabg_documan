@@ -55,7 +55,7 @@ module.exports.passport = {
   //     scope: ['email'] /* email is necessary for login behavior */
   //   }
   // },
-
+  
   // google: {
   //   name: 'Google',
   //   protocol: 'oauth2',
@@ -63,7 +63,9 @@ module.exports.passport = {
   //   options: {
   //     clientID: locals.google.clientID,
   //     clientSecret: locals.google.clientSecret,
-  //     scope: 'https://www.googleapis.com/auth/plus.login'
+  //     scope: ['https://www.googleapis.com/auth/plus.login'
+  //           , 'https://www.googleapis.com/auth/drive.file'
+  //           , 'https://www.googleapis.com/auth/drive.metadata']
   //   }
   // },
 
