@@ -1,13 +1,11 @@
-doctype html
-html(lang="en")
-  head
-    title= pageTitle
-  body
-    #container.col
-      p Документи, чакащи плащане:
-      ul
-        each doc in documents
-          li
-            a(href='/get_document/' + doc.path)= doc.name
-            |  
-            a(href='/pay_document/' + doc.id) Означи като платен
+extends ./layout.jade
+
+block content
+  #container.container
+    h3 Документи, чакащи плащане:
+    ul
+      each doc in documents
+        li
+          a(href='/get_document/' + doc.path)= doc.name
+          |  
+          a(href='/pay_document/' + doc.id) Означи като платен

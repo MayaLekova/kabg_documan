@@ -1,52 +1,47 @@
-doctype html
-html(lang="en")
-  head
-    title= pageTitle
-    link(rel="stylesheet", href="bootstrap_dist/css/bootstrap.min.css")
-    link(rel="stylesheet", href="styles/main.css")
-    script(src="bootstrap_dist/js/bootstrap.min.js")
-  body
-    h1(style="text-align:center")= 'Здравей, ' + user.username
-    #notifications.container
-      h3 Откакто те нямаше, в системата се случи следното:
-      ul
-        each notif in notifications
-          li
-            = notif.text
+extends ./layout.jade
+
+block content
+  h1(style="text-align:center")= 'Здравей, ' + user.username
+  #notifications.container
+    h3 Откакто те нямаше, в системата се случи следното:
+    ul
+      each notif in notifications
+        li
+          = notif.text
+          |  
+          a(href='/get_document/' + notif.path).btn.btn-warning Свали
+          |  
+          a(href='/dismiss/' + notif.id).btn.btn-danger Скрий
+          if admin
             |  
-            a(href='/get_document/' + notif.path).btn.btn-warning Свали
-            |  
-            a(href='/dismiss/' + notif.id).btn.btn-danger Скрий
-            if admin
-              |  
-              a(href='/update_document/' + notif.doc_id).btn.btn-info Обнови документ
-    #container.container
-      h3 Твоите качени документи:
-      ul
-        each doc in documents
-          li
-            a(href='/get_document/' + doc.path)= doc.name
-      if admin
-        a(href='/unsent_documents').btn.btn-default Виж всички за изпращане в счетоводството
-        br
-        a(href='/unpaid_documents').btn.btn-default Виж всички за плащане
-        br
-        a(href='/ready_documents').btn.btn-default Виж всички готови документи
-    #submit.container
-      h3 Качи нови документи
-      .col
-        form(action="/document/upload?type=contract",enctype="multipart/form-data",method="post")
-          input(type="file", name="document", multiple="multiple")
-          input(type="submit", value="Качи договор")
-      .col
-        form(action="/document/upload?type=declaration",enctype="multipart/form-data",method="post")
-          input(type="file", name="document", multiple="multiple")
-          input(type="submit", value="Качи декларация")
-      .col
-        form(action="/document/upload?type=order",enctype="multipart/form-data",method="post")
-          input(type="file", name="document", multiple="multiple")
-          input(type="submit", value="Качи поръчка")
-      .col
-        form(action="/document/upload?type=protocol",enctype="multipart/form-data",method="post")
-          input(type="file", name="document", multiple="multiple")
-          input(type="submit", value="Качи протокол")
+            a(href='/update_document/' + notif.doc_id).btn.btn-info Обнови документ
+  #container.container
+    h3 Твоите качени документи:
+    ul
+      each doc in documents
+        li
+          a(href='/get_document/' + doc.path)= doc.name
+    if admin
+      a(href='/unsent_documents').btn.btn-default Виж всички за изпращане в счетоводството
+      br
+      a(href='/unpaid_documents').btn.btn-default Виж всички за плащане
+      br
+      a(href='/ready_documents').btn.btn-default Виж всички готови документи
+  #submit.container
+    h3 Качи нови документи
+    .col
+      form(action="/document/upload?type=contract",enctype="multipart/form-data",method="post")
+        input(type="file", name="document", multiple="multiple")
+        input(type="submit", value="Качи договор")
+    .col
+      form(action="/document/upload?type=declaration",enctype="multipart/form-data",method="post")
+        input(type="file", name="document", multiple="multiple")
+        input(type="submit", value="Качи декларация")
+    .col
+      form(action="/document/upload?type=order",enctype="multipart/form-data",method="post")
+        input(type="file", name="document", multiple="multiple")
+        input(type="submit", value="Качи поръчка")
+    .col
+      form(action="/document/upload?type=protocol",enctype="multipart/form-data",method="post")
+        input(type="file", name="document", multiple="multiple")
+        input(type="submit", value="Качи протокол")
