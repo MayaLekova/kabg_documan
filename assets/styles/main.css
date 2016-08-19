@@ -27,3 +27,8 @@ input[type="file"] {
   height: 34px;
   position: relative;
 }
+
+.btn-logout {
+  right: 30px;
+  position: absolute;
+}
