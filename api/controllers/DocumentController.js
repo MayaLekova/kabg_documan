@@ -77,6 +77,7 @@ module.exports = {
                   path: path.basename(files[0].fd),
                   toUser: adminName,
                   doc_id: created.id,
+                  originatedBy: req.user.username
                 };
               })).exec(function (err, notifsCreated) {
                 if(err) console.error(err);

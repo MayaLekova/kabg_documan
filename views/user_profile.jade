@@ -1,0 +1,15 @@
+extends ./layout.jade
+
+block content
+  div.container
+    h3= 'Качени документи на ' + user.username
+    ul
+      each doc in documents
+        li
+          a(href='/get_document/' + doc.path)= doc.name
+          |  
+          span(style="text-align: right")= doc.createdAt.toDateString()
+
+  div.container
+    p Мейл за контакт:
+    a(href='mailto:' + user.email)= user.email

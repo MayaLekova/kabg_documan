@@ -1,13 +1,13 @@
 input[type="file"] {
-	display: inline-block;
+  display: inline-block;
 }
 
 .container {
-	padding: 0px 20px 10px 20px;
-	border: 2px solid #000;
-	border-radius: 10px;
-	margin-top: 10px;
-	margin-bottom: 10px;
+  padding: 0px 20px 10px 20px;
+  border: 2px solid #000;
+  border-radius: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .vertical-center {
@@ -16,4 +16,14 @@ input[type="file"] {
 
   display: flex;
   align-items: center;
+}
+
+.notif-controls {
+  right: 40px;
+  position: absolute;
+}
+
+.notification-line {
+  height: 34px;
+  position: relative;
 }

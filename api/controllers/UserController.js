@@ -29,19 +29,39 @@ module.exports = {
   },
 
   /**
+   * `UserController.get()`
+   */
+  get_user: function (req, res) {
+    User.findOne({username: req.params.username}, function(err, user) {
+      if(err)
+        return res.serverError(err);
+
+      Document.find({owner: req.params.username}, function(err, docs) {
+        if(err)
+          return res.serverError(err);
+        return res.view('user_profile', {
+          user: user,
+          documents: docs,
+          admin: local.admins.indexOf(req.user.username) >= 0
+        });
+      });    
+    });
+  },
+
+  /**
    * `UserController.homepage()`
    */
   homepage: function (req, res) {
     Document.find({owner: req.user.username}, function(err, docs) {
       if(err)
         return res.serverError(err);
+
       Notifications.find({toUser: req.user.username, dismissed: false}, function(err, notifications) {
         if(err)
           return res.serverError(err);
 
         return res.view('homepage', {
           user: req.user,
-          youAreUsingJade: true,
           documents: docs,
           notifications: notifications,
           admin: local.admins.indexOf(req.user.username) >= 0

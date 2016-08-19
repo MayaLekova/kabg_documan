@@ -6,15 +6,16 @@ block content
     h3 Откакто те нямаше, в системата се случи следното:
     ul
       each notif in notifications
-        li
-          = notif.text
-          |  
-          a(href='/get_document/' + notif.path).btn.btn-warning Свали
-          |  
-          a(href='/dismiss/' + notif.id).btn.btn-danger Скрий
-          if admin
+        li.notification-line
+          a(href='/get_user/' + notif.originatedBy)= notif.text
+          span.notif-controls
             |  
-            a(href='/update_document/' + notif.doc_id).btn.btn-info Обнови документ
+            a(href='/get_document/' + notif.path).btn.btn-warning Свали
+            |  
+            a(href='/dismiss/' + notif.id).btn.btn-danger Скрий
+            if admin
+              |  
+              a(href='/update_document/' + notif.doc_id).btn.btn-info Обнови документ
   #container.container
     h3 Твоите качени документи:
     ul
