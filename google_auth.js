@@ -3,14 +3,14 @@ var google = require('googleapis');
 var googleAuth = require('google-auth-library');
 var fs = require('fs');
 var readline = require('readline');
-
+var oauth2Client;
 
 // If modifying these scopes, delete your previously saved credentials
 // at ~/.credentials/script-nodejs-quickstart.json
-var SCOPES = ['https://www.googleapis.com/auth/drive'];
+var SCOPES = ['https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/spreadsheets'];
 var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
     process.env.USERPROFILE) + '/.credentials/';
-var TOKEN_PATH = TOKEN_DIR + 'script-nodejs-quickstart.json';
+var TOKEN_PATH = TOKEN_DIR + 'kabg-documan.json';
 
 function authorizeAndUpload(fileStream, cb) {
   // Load client secrets from a local file.
@@ -25,6 +25,34 @@ function authorizeAndUpload(fileStream, cb) {
   });
 }
 
+function createAuth(callback) {
+    fs.readFile('client_secret.json', function processClientSecrets(err, content) {
+    if (err) {
+      console.log('Error loading client secret file: ' + err);
+      return;
+    }
+    var credentials = JSON.parse(content);
+
+    var clientSecret = credentials.installed.client_secret;
+    var clientId = credentials.installed.client_id;
+    var redirectUrl = credentials.installed.redirect_uris[0];
+    var auth = new googleAuth();
+
+    oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
+
+    // Check if we have previously stored a token.
+    fs.readFile(TOKEN_PATH, function(err, token) {
+      if (err) {
+        getNewToken(oauth2Client, callback);
+      } else {
+        oauth2Client.credentials = JSON.parse(token);
+        callback(oauth2Client);
+      }
+    });
+  });
+
+}
+
 /**
  * Create an OAuth2 client with the given credentials, and then execute the
  * given callback function.
@@ -37,7 +65,7 @@ function authorize(credentials, callback) {
   var clientId = credentials.installed.client_id;
   var redirectUrl = credentials.installed.redirect_uris[0];
   var auth = new googleAuth();
-  var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
+  oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
 
   // Check if we have previously stored a token.
   fs.readFile(TOKEN_PATH, function(err, token) {
@@ -48,6 +76,17 @@ function authorize(credentials, callback) {
       callback(oauth2Client);
     }
   });
+}
+
+function getAuth() {
+  if(!oauth2Client) {
+    createAuth(function(auth) {
+      
+    });
+    return undefined;
+  } else {
+    return oauth2Client;
+  }
 }
 
 /**
@@ -185,4 +224,5 @@ function callAppsScript(functionName, params, auth) {
 
 module.exports = {
   upload: authorizeAndUpload,
+  auth: getAuth,
 }

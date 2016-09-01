@@ -10,6 +10,7 @@ var fs = require('fs');
 var local = require('../../config/local.js');
 var ObjectId = require('mongodb').ObjectID;
 var uploadFile = require('../../google_auth').upload;
+var googleSheet = require('../services/google_sheet');
 
 var docTypeToReadable = {
   "contract": "договор",
@@ -147,6 +148,11 @@ module.exports = {
     Document.find({ paid: true, sent: true, signedByAdmin: true }).exec(function(err, found) {
       return res.view('ready', { documents: found });
     });
+  },
+
+  status: function(req, res) {
+    googleSheet.listFields();
+    return res.view('status_table');
   }
 
 };
