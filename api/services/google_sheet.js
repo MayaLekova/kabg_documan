@@ -1,15 +1,17 @@
 var getAuth = require('../../google_auth').auth;
-if(!getAuth()) {
-  var auth = getAuth();
-}
+var auth;
+getAuth(function(newAuth) {
+  auth = newAuth;
+});
+
 var google = require('googleapis');
-var spreadsheetId = '1Vha28cqZIrYkDMBgbqfCCzZVsXomUZqGc_Ju8m8K0oo';
+var spreadsheetId = require('../../config/local.js').google.spreadsheetId;
 var key = 'AIzaSyCbtBn8lrWIOH-749Qt71gBqwHcDGLj_E4';
 
 function listFields() {
   var sheets = google.sheets('v4');
   sheets.spreadsheets.values.get({
-    auth: auth,
+    // auth: auth,
     spreadsheetId: spreadsheetId,
     range: 'Contracts!A2:J',
     key: key
@@ -31,31 +33,50 @@ function listFields() {
   });
 }
 
-function addUser() {
-  var user = {
-    username: 'Baba',
-    email: 'baba@family.com'
-  };
-
+function addUser(user, row) {
   var sheets = google.sheets('v4');
   sheets.spreadsheets.values.update({
     auth: auth,
     spreadsheetId: spreadsheetId,
-    range: 'Contracts!A3:J',
+    range: 'Contracts!A' + row + ':J',
     valueInputOption: 'USER_ENTERED',
-    resource: [
-      [user.username, null, null, null, null, null, null, null, user.email]
-    ],
+    resource: {
+      "values": [
+        [user.username, user.email, null, null, null, null, null, 'не', null, null]
+      ]
+    },
     key: key,
   }, function(err, response) {
     if(err){
       console.log('The API returned an error: ' + err);
       return;
     }
-  })
+  });
+}
+
+function setOrderStatus(col, row, status) {
+  var sheets = google.sheets('v4');
+  sheets.spreadsheets.values.update({
+    auth: auth,
+    spreadsheetId: spreadsheetId,
+    range: 'Orders!' + col + row,
+    valueInputOption: 'USER_ENTERED',
+    resource: {
+      "values": [
+        [status]
+      ]
+    },
+    key: key,
+  }, function(err, response) {
+    if(err){
+      console.log('The API returned an error: ' + err);
+      return;
+    }
+  });
 }
 
 module.exports = {
   listFields: listFields,
   addUser: addUser,
+  setOrderStatus: setOrderStatus
 };

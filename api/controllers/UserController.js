@@ -8,10 +8,7 @@
 var local = require('../../config/local.js');
 
 module.exports = {
-	
-
-
-  /**
+	  /**
    * `UserController.list()`
    */
   list: function (req, res) {

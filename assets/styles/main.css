@@ -28,7 +28,7 @@ input[type="file"] {
   position: relative;
 }
 
-.btn-logout {
-  right: 30px;
-  position: absolute;
+.btn-toolbar {
+  margin: 5px;
+  float: right;
 }

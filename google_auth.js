@@ -78,14 +78,13 @@ function authorize(credentials, callback) {
   });
 }
 
-function getAuth() {
+function getAuth(cb) {
   if(!oauth2Client) {
     createAuth(function(auth) {
-      
+      cb(auth);
     });
-    return undefined;
   } else {
-    return oauth2Client;
+    cb(oauth2Client);
   }
 }
 

@@ -151,8 +151,6 @@ module.exports = {
   },
 
   status: function(req, res) {
-    googleSheet.addUser();
-    // googleSheet.listFields();
     return res.view('status_table');
   }
 
