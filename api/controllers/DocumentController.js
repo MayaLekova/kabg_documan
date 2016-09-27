@@ -85,6 +85,9 @@ module.exports = {
                 return res.redirect('/');
               });
             } else {
+              if(req.query.type == 'contract') {
+                googleSheet.setContractStatus(req.query.originalOwner, 'да');
+              }
               return res.redirect('/');
             }
           });

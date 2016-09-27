@@ -54,6 +54,47 @@ function addUser(user, row) {
   });
 }
 
+function setContractStatus(username, status) {
+  var sheets = google.sheets('v4');
+  sheets.spreadsheets.values.get({
+    spreadsheetId: spreadsheetId,
+    range: 'Contracts!A:J',
+    key: key
+  }, function(err, response) {
+    if (err) {
+      console.log('The API returned an error: ' + err);
+      return;
+    }
+    var values = response.values;
+    for(var i = 0; i < values.length; i++) {
+      var rowData = values[i];
+      var name = rowData[0];
+      if(name != username) continue;
+
+      var col = 'H';
+      var row = i + 1;
+      sheets.spreadsheets.values.update({
+        auth: auth,
+        spreadsheetId: spreadsheetId,
+        range: 'Contracts!' + col + row,
+        valueInputOption: 'USER_ENTERED',
+        resource: {
+          "values": [
+            [status]
+          ]
+        },
+        key: key,
+      }, function(err, response) {
+        if(err){
+          console.log('The API returned an error: ' + err);
+          return;
+        }
+      });
+    }
+  });
+
+}
+
 function setOrderStatus(col, row, status) {
   var sheets = google.sheets('v4');
   sheets.spreadsheets.values.update({
@@ -78,5 +119,6 @@ function setOrderStatus(col, row, status) {
 module.exports = {
   listFields: listFields,
   addUser: addUser,
-  setOrderStatus: setOrderStatus
+  setOrderStatus: setOrderStatus,
+  setContractStatus: setContractStatus
 };
