@@ -16,6 +16,7 @@ module.exports = {
     signedByAdmin : { type: 'boolean', defaultsTo: function() { return false; } },
     sent : { type: 'boolean', defaultsTo: function() { return false; } },
     paid : { type: 'boolean', defaultsTo: function() { return false; } },
+    order : { model: 'Order' },
   }
 };
 

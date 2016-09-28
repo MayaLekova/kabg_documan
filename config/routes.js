@@ -70,4 +70,6 @@ module.exports.routes = {
   'get /dismiss/:id': 'NotificationsController.dismiss',
 
   'get /status_table': 'DocumentController.status',
+
+  'get /documents_by_user/:username': 'OrderController.getAllDocumentsByUsername',
 };
