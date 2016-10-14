@@ -25,9 +25,9 @@ module.exports = {
    * `DocumentController.list()`
    */
   list: function (req, res) {
-	  Document.find({owner: req.user.username}, function(err, data) {
-	  	return res.json(data);
-	  });
+      Document.find({owner: req.user.username}, function(err, data) {
+        return res.json(data);
+    });
   },
 
   /**
@@ -70,7 +70,6 @@ module.exports = {
                 console.error('Error uploading file to Google Drive', err);
               } else {
                 console.log('Uploaded file to Google Drive:', result);
-				mailer.sendMail('armianov@gmai.com', 'test-mest', 'na baba ti futbolnite gashti...');
               }
             });
             if(!created.signedByAdmin) {
@@ -124,6 +123,18 @@ module.exports = {
       if(err) {
         return res.serverError(err);
       }
+      
+      var mailText = '<p>Здравейте!</p><p>Приложено Ви изпращаме ' + updated[0].type + ' документ. </p><p> Поздрави, Документчо <p>' +
+                     '<p></p><p><small>Това писмо е автоматично генерирано от системата Documan.</small></p>';
+      var subject = 'Променен статус на документ';
+      var fullPath = path.join(path.join(__dirname, '../../.tmp/uploads/'), updated[0].path);
+
+      try {
+        mailer.sendMail(local.email.receiver, subject, mailText, updated[0].path, fullPath);
+      } catch(err) {
+        return res.serverError(err);
+      }
+      
       return res.redirect('/');
     });
   },
