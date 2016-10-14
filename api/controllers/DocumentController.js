@@ -127,7 +127,7 @@ module.exports = {
       var mailText = '<p>Здравейте!</p><p>Приложено Ви изпращаме ' + updated[0].type + ' документ. </p><p> Поздрави, Документчо <p>' +
                      '<p></p><p><small>Това писмо е автоматично генерирано от системата Documan.</small></p>';
       var subject = 'Променен статус на документ';
-      var fullPath = path.join(path.join(__dirname, '../../.tmp/uploads/'), updated[0].path);
+      var fullPath = path.join(__dirname, '../../.tmp/uploads/', updated[0].path);
 
       try {
         mailer.sendMail(local.email.receiver, subject, mailText, updated[0].path, fullPath);
