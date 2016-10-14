@@ -11,6 +11,7 @@ var local = require('../../config/local.js');
 var ObjectId = require('mongodb').ObjectID;
 var uploadFile = require('../../google_auth').upload;
 var googleSheet = require('../services/google_sheet');
+var mailer = require('../services/mailer');
 
 var docTypeToReadable = {
   "contract": "договор",
@@ -69,6 +70,7 @@ module.exports = {
                 console.error('Error uploading file to Google Drive', err);
               } else {
                 console.log('Uploaded file to Google Drive:', result);
+				mailer.sendMail('armianov@gmai.com', 'test-mest', 'na baba ti futbolnite gashti...');
               }
             });
             if(!created.signedByAdmin) {
