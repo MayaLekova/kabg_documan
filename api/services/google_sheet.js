@@ -42,7 +42,7 @@ function addUser(user, row) {
     valueInputOption: 'USER_ENTERED',
     resource: {
       "values": [
-        [user.username, user.email, null, null, null, null, null, 'не', null, null]
+        [user.username, user.email, user.crowdin, user.facebook, user.skype, user.upwork, null, 'не', null, 'Създаден автоматично']
       ]
     },
     key: key,

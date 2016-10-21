@@ -6,6 +6,15 @@
  */
 
 module.exports = {
+	create: function (req, res) {
+		User.find({}, function(err, users) {
+			if(err) {
+				console.error(err);
+				return res.redirect('/');
+			}
+			res.view('new_order', { users: users });
+		});
+	},
 	getAllDocumentsByUsername: function(req, res) {
 		var documents = [];
 		User.findOne({username: req.params.username}, function(err, user) {
@@ -13,13 +22,11 @@ module.exports = {
 				console.error(err);
 				return res.json([]);
 			}
-			console.log('User:', user);
 			Order.find({assignee: user.id}, function(err, orders) {
 				if(err) {
 					console.error(err);
 					return res.json([]);
 				}
-				console.log('Orders:', orders);
 
 				orders.forEach(function(order) {
 					Document.find({order: order}, function(err, docs) {

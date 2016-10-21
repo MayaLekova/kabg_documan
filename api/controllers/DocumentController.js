@@ -12,6 +12,7 @@ var ObjectId = require('mongodb').ObjectID;
 var uploadFile = require('../../google_auth').upload;
 var googleSheet = require('../services/google_sheet');
 var mailer = require('../services/mailer');
+var userData = require('../services/user_data');
 
 var docTypeToReadable = {
   "contract": "договор",
@@ -72,6 +73,9 @@ module.exports = {
                 console.log('Uploaded file to Google Drive:', result);
               }
             });
+            if(req.query.type == 'order') {
+              userData.addOrder(req.user, /\((\w+)\)/.exec(req.body.username)[1], created.id);
+            }
             if(!created.signedByAdmin) {
               Notifications.create(local.admins.map(function(adminName) {
                 return {

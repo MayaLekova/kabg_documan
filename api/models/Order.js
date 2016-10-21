@@ -7,8 +7,13 @@
 
 module.exports = {
   attributes: {
+  	creator: { model: 'user', required: true },
   	assignee: { model: 'user', required: true },
   	assignedOn: { type: 'datetime', defaultsTo: function() { return new Date(); }, required: true },
+  	deliveredOn: { type: 'datetime' },
+  	order: { model: 'document' },
+  	protocol: { model: 'document' },
+  	receipt: { model: 'document' },
   }
 };
 
