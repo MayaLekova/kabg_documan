@@ -4,7 +4,12 @@ var User = {
 
   attributes: {
     username  : { type: 'string', unique: true },
+    fullname  : { type: 'string' },
     email     : { type: 'email',  unique: true },
+    crowdin  : { type: 'string' },
+    facebook  : { type: 'string' },
+    skype  : { type: 'string' },
+    upwork  : { type: 'string' },
     passports : { collection: 'Passport', via: 'user' }
   }
 };

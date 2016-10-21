@@ -26,7 +26,12 @@ var crypto    = require('crypto');
 exports.register = function (req, res, next) {
   var email    = req.param('email')
     , username = req.param('username')
-    , password = req.param('password');
+    , fullname = req.param('fullname')
+    , password = req.param('password')
+    , crowdin  = req.param('crowdin')
+    , facebook = req.param('facebook')
+    , skype    = req.param('skype')
+    , upwork   = req.param('upwork')
 
   if (!email) {
     req.flash('error', 'Error.Passport.Email.Missing');
@@ -45,7 +50,12 @@ exports.register = function (req, res, next) {
 
   User.create({
     username : username
+  , fullname : fullname
   , email    : email
+  , crowdin  : crowdin
+  , facebook : facebook
+  , skype    : skype
+  , upwork   : upwork
   }, function (err, user) {
     if (err) {
       if (err.code === 'E_VALIDATION') {

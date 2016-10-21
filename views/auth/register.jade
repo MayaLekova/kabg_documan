@@ -11,6 +11,11 @@ block content
       form(role="form", action="/auth/local/register", method="post", style="text-align: center").center-block
         div.form-group
           input(type="text", name="username", placeholder="Username").form-control
+          input(type="text", name="fullname", placeholder="Две имена").form-control
           input(type="text", name="email", placeholder="Email").form-control
           input(type="password", name="password", placeholder="Password (at least 8 characters)").form-control
+          input(type="text", name="crowdin", placeholder="CrowdIn").form-control
+          input(type="text", name="facebook", placeholder="Facebook").form-control
+          input(type="text", name="skype", placeholder="Skype").form-control
+          input(type="text", name="upwork", placeholder="UpWork").form-control
         button(type="submit").btn.btn-primary Sign up
