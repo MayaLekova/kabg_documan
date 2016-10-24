@@ -60,7 +60,7 @@ module.exports = {
             owner : (req.query.originalOwner ? req.query.originalOwner : req.user.username),
             path : path.basename(files[0].fd),
             type : req.query.type,
-            signedByUser: true,
+            signedByUser: (req.query.type != 'order') || !!req.query.signedByUser,  // New orders aren't signed initially
             signedByAdmin: !!req.query.signedByAdmin,
           })
           .exec(function (err, created){
@@ -73,8 +73,23 @@ module.exports = {
                 console.log('Uploaded file to Google Drive:', result);
               }
             });
-            if(req.query.type == 'order') {
-              userData.addOrder(req.user, /\((\w+)\)/.exec(req.body.username)[1], created.id);
+            if(req.query.type == 'order' && !created.signedByUser) {
+              userData.addOrder(req.user
+              , /\((\w+)\)/.exec(req.body.username)[1]
+              , created.id
+              , function(err, order) {
+                Notifications.create({
+                    text: 'Имате нова поръчка от ' + req.user.username + '.',
+                    path: path.basename(files[0].fd),
+                    toUser: order.assignee.username,
+                    doc_id: created.id,
+                    originatedBy: req.user.username
+                  }
+                ).exec(function (err, notifsCreated) {
+                  if(err) console.error(err);
+                  // return res.redirect('/');
+                });
+              });
             }
             if(!created.signedByAdmin) {
               Notifications.create(local.admins.map(function(adminName) {

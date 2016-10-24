@@ -54,6 +54,27 @@ function addUser(user, row) {
   });
 }
 
+function addOrder(order, row) {
+  var sheets = google.sheets('v4');
+  sheets.spreadsheets.values.update({
+    auth: auth,
+    spreadsheetId: spreadsheetId,
+    range: 'Orders!A' + row + ':L',
+    valueInputOption: 'USER_ENTERED',
+    resource: {
+      "values": [
+        [order.id, order.assignee.fullname, 'не', null, 'не', 'не', 'не', 'не', 'не', 'не', 'не', 'не']
+      ]
+    },
+    key: key,
+  }, function(err, response) {
+    if(err){
+      console.log('The API returned an error: ' + err);
+      return;
+    }
+  });
+}
+
 function setContractStatus(username, status) {
   var sheets = google.sheets('v4');
   sheets.spreadsheets.values.get({
@@ -119,6 +140,7 @@ function setOrderStatus(col, row, status) {
 module.exports = {
   listFields: listFields,
   addUser: addUser,
+  addOrder: addOrder,
   setOrderStatus: setOrderStatus,
   setContractStatus: setContractStatus
 };

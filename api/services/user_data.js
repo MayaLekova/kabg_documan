@@ -7,15 +7,24 @@ function addUser(user) {
 	});
 }
 
-function addOrder(creator, assignee, orderId) {
+function addOrder(creator, assignee, orderId, callback) {
 	User.findOne({username: assignee}, function(err, user) {
 		if(err) {
 			console.error(err);
-			return;
+			return callback(err);
 		}
-		Order.create({creator: creator.id, assignee: user.id, order: orderId}, function(err) {
-			if(err) console.error(err);
-			// TODO: Add row to status table
+		Order.create({creator: creator.id, assignee: user.id, order: orderId}, function(err, created) {
+			if(err) {
+				console.error(err);
+				return callback(err);
+			}
+			Order.find(function(err, orders) {
+				var num = orders.length + 1;
+				Order.findOne({id: created.id}).populate('assignee').exec(function(err, order) {
+		    		googleSheet.addOrder(order, num);
+		    		callback(null, order);
+				})
+			});
 		});
 	});
 }
