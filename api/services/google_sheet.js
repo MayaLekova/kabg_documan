@@ -116,6 +116,46 @@ function setContractStatus(username, status) {
 
 }
 
+function getOrderPosition(order, changeType, callback) {
+  var changeTypeToCol = {
+    "declaration": "G",
+    "order": "C",
+    "protocol": "E",
+    "receipt": "H",
+    "renumerationForm": "I",
+  }
+  var col = changeTypeToCol[changeType];
+
+  var rowIdx = 0;
+
+  var sheets = google.sheets('v4');
+  sheets.spreadsheets.values.get({
+    spreadsheetId: spreadsheetId,
+    range: 'Orders!A2:L',
+    key: key
+  }, function(err, response) {
+    if (err) {
+      console.error('Error from getOrderPosition: The API returned an error: ' + err);
+      return;
+    }
+    var rows = response.values;
+    if (rows.length == 0) {
+      console.error('Error from getOrderPosition: No data found.');
+    } else {
+      for (var i = 0; i < rows.length; i++) {
+        var row = rows[i];
+        if(row[0] == order.id) {
+          rowIdx = i;
+        }
+      }
+      if(i == rows.length) {
+        console.error('Error from getOrderPosition: Order not found, ID:', order.id);
+      }
+    }
+    callback(col, rowIdx);
+  });
+}
+
 function setOrderStatus(col, row, status) {
   var sheets = google.sheets('v4');
   sheets.spreadsheets.values.update({
@@ -142,5 +182,6 @@ module.exports = {
   addUser: addUser,
   addOrder: addOrder,
   setOrderStatus: setOrderStatus,
+  getOrderPosition: getOrderPosition,
   setContractStatus: setContractStatus
 };

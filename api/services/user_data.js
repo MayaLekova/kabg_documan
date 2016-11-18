@@ -29,7 +29,20 @@ function addOrder(creator, assignee, orderId, callback) {
 	});
 }
 
+function updateDocStatus(document, status) {
+	Order.find({id: document.order}, function(err, order) {
+		if(err) {
+			console.error('Error from updateDocStatus:', err);
+			return;
+		}
+		googleSheet.getOrderPosition(order, document.type, function(col, row) {
+			googleSheet.setOrderStatus(col, row, status);
+		});
+	});
+}
+
 module.exports = {
 	addUser: addUser,
 	addOrder: addOrder,
+	updateDocStatus: updateDocStatus,
 };

@@ -76,10 +76,13 @@ module.exports = {
               }
             });
             if(req.query.type == 'order' && !created.signedByUser) {
+              console.log(req.body);
               userData.addOrder(req.user
               , /\((\w+)\)/.exec(req.body.username)[1]
               , created.id
               , function(err, order) {
+                created.order = order.id;
+                created.save();
                 Notifications.create({
                     text: 'Имате нова поръчка от ' + req.user.username + '.',
                     path: path.basename(files[0].fd),
@@ -109,6 +112,8 @@ module.exports = {
             } else {
               if(req.query.type == 'contract') {
                 googleSheet.setContractStatus(req.query.originalOwner, 'да');
+              } else {
+                userData.updateDocStatus(created, 'да');
               }
               return res.redirect('/');
             }
