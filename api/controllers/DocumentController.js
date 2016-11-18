@@ -19,6 +19,8 @@ var docTypeToReadable = {
   "declaration": "декларация",
   "order": "поръчка",
   "protocol": "протокол",
+  "receipt": "разписка",
+  "renumerationForm": "СИС",
 }
 
 module.exports = {

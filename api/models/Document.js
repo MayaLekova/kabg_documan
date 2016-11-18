@@ -10,7 +10,7 @@ module.exports = {
   attributes: {
     name  : { type: 'string', required: true },
     path  : { type: 'string', required: true },
-    type  : { type: 'string', enum: ['contract', 'declaration', 'order', 'protocol'], required: true },
+    type  : { type: 'string', enum: ['contract', 'declaration', 'order', 'protocol', 'receipt', 'renumerationForm'], required: true },
     owner : { model: 'User', required: true },
     signedByUser : { type: 'boolean' },
     signedByAdmin : { type: 'boolean', defaultsTo: function() { return false; } },
