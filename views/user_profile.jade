@@ -3,12 +3,17 @@ extends ./layout.jade
 block content
   div.container
     h3= 'Качени документи на ' + user.username
-    ul
+    //- ul
       each doc in documents
         li
           a(href='/get_document/' + doc.path)= doc.name
           |  
           span(style="text-align: right")= doc.createdAt.toDateString()
+    table#docs-table(data-url="/get_user_docs/" + user.username)
+      thead
+        tr
+          th Документ
+          th Дата
 
   div.container
     p Мейл за контакт:

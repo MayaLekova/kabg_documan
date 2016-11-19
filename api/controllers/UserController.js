@@ -45,6 +45,19 @@ module.exports = {
     });
   },
 
+  get_user_docs: function(req, res) {
+    User.findOne({username: req.params.username}, function(err, user) {
+      if(err)
+        return res.serverError(err);
+
+      Document.find({owner: req.params.username}, function(err, docs) {
+        if(err)
+          return res.serverError(err);
+        return res.json(docs);
+      });    
+    });
+  },
+
   /**
    * `UserController.homepage()`
    */

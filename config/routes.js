@@ -56,6 +56,7 @@ module.exports.routes = {
 
   'get /me': 'UserController.get',
   'get /get_user/:username': 'UserController.get_user',
+  'get /get_user_docs/:username': 'UserController.get_user_docs',
 
   'post /upload': 'DocumentController.upload',
   'get /documents': 'DocumentController.list',
