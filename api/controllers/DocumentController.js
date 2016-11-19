@@ -76,7 +76,6 @@ module.exports = {
               }
             });
             if(req.query.type == 'order' && !created.signedByUser) {
-              console.log(req.body);
               userData.addOrder(req.user
               , /\((\w+)\)/.exec(req.body.username)[1]
               , created.id
@@ -95,6 +94,14 @@ module.exports = {
                   // return res.redirect('/');
                 });
               });
+            }
+            if(req.query.type != 'order' && req.query.type != 'contract') {
+              if(!created.signedByAdmin) {
+                created.order = req.body.orderId;
+              } else {
+                created.order = req.query.originalOrderId;
+              }
+              created.save(); 
             }
             if(!created.signedByAdmin) {
               Notifications.create(local.admins.map(function(adminName) {

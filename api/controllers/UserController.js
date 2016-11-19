@@ -57,12 +57,23 @@ module.exports = {
         if(err)
           return res.serverError(err);
 
-        return res.view('homepage', {
-          user: req.user,
-          documents: docs,
-          notifications: notifications,
-          admin: local.admins.indexOf(req.user.username) >= 0
-        });        
+        var orderQuery = local.admins.indexOf(req.user.username) >= 0
+          ? {}
+          : { assignee: req.user.id };
+        Order.find(orderQuery)
+          .populate('assignee')
+          .exec(function(err, orders) {
+            if(err)
+              return res.serverError(err);
+            
+            return res.view('homepage', {
+              user: req.user,
+              documents: docs,
+              notifications: notifications,
+              admin: local.admins.indexOf(req.user.username) >= 0,
+              orders: orders
+            });        
+          });
       })
     });
   }

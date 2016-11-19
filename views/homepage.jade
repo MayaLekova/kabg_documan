@@ -32,8 +32,8 @@ block content
   #submit.container
     h3 Качи нови документи
     +uploadDoc("contract", "договор")
-    +uploadDoc("declaration", "декларация")
+    +uploadDoc("declaration", "декларация", orders)
     +uploadDoc("order", "поръчка")
-    +uploadDoc("protocol", "протокол")
-    +uploadDoc("receipt", "разписка/фактура")
-    +uploadDoc("renumerationForm", "СИС")
+    +uploadDoc("protocol", "протокол", orders)
+    +uploadDoc("receipt", "разписка/фактура", orders)
+    +uploadDoc("renumerationForm", "СИС", orders)

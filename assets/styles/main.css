@@ -32,3 +32,7 @@ input[type="file"] {
   margin: 5px;
   float: right;
 }
+
+.submit-doc {
+  float: right;
+}
