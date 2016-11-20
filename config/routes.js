@@ -74,4 +74,5 @@ module.exports.routes = {
 
   'get /new_order': 'OrderController.create',
   'get /documents_by_user/:username': 'OrderController.getAllDocumentsByUsername',
+  'get /all_orders': 'OrderController.getAll',
 };

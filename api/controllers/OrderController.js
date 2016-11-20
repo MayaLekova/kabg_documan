@@ -41,6 +41,35 @@ module.exports = {
 				return res.json(documents);
 			});
 		});
+	},
+	getAll: function(req, res) {
+		var documents = {};
+		Order.find()
+			.populate('assignee')
+			.exec(function(err, orders) {
+				if(err) {
+					console.error(err);
+					return res.serverError(err);
+				}
+
+				async.each(orders, function(order, cb) {
+					Document.find({order: order.id}, function(err, docs) {
+						err && cb(err);
+						documents[order.id] = docs;
+						cb(null);
+					});
+				}, function(err) {
+					if(err) {
+						console.error(err);
+						return res.serverError(err);							
+					}						
+					console.log('Documents length:', documents);
+					return res.view('orders', {
+						orders: orders,
+						documents: documents,
+					});
+				});
+			});
 	}
 };
 

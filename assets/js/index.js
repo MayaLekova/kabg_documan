@@ -16,4 +16,4 @@ $('#docs-table').simple_datagrid(
   	console.log('Data is loaded');
     // Data is loaded
   }
-);;
+);

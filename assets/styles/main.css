@@ -36,3 +36,13 @@ input[type="file"] {
 .submit-doc {
   float: right;
 }
+
+.waiting {
+  background-color: lightcoral;
+  font-weight: bold;
+}
+
+.ready {
+  background-color: lightgreen;
+  font-weight: bold;
+}

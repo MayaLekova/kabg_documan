@@ -1,0 +1,17 @@
+extends ./layout.jade
+
+block content
+  h1(style="text-align:center") Всички поръчки
+  div.panel-group
+    div.panel.panel-default
+      each order in orders
+        div.panel-heading
+          h4.panel-title
+            a(data-toggle="collapse", href="#collapse-#{order.id}")= order.assignee.fullname + ' / ' + new Date(order.assignedOn).toDateString()
+        div(id="collapse-#{order.id}").panel-collapse.collapse
+          ul.list-group
+            each doc in documents[order.id]
+              li(value=doc.id, class=((doc.signedByUser && !doc.signedByAdmin) ||
+                (doc.signedByUser && doc.signedByAdmin && !doc.sent) ||
+                (doc.signedByUser && doc.signedByAdmin && !doc.paid)) ? "waiting" : "ready").list-group-item
+                a(href='/get_document/' + doc.path)= doc.name + ' / ' + new Date(doc.createdAt).toDateString()
