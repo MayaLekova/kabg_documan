@@ -63,7 +63,6 @@ module.exports = {
 						console.error(err);
 						return res.serverError(err);							
 					}						
-					console.log('Documents length:', documents);
 					return res.view('orders', {
 						orders: orders,
 						documents: documents,
