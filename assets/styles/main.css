@@ -33,12 +33,17 @@ input[type="file"] {
   float: right;
 }
 
+.btn-menu {
+  float: right;
+  margin-right: 5px;
+}
+
 .submit-doc {
   float: right;
 }
 
 .waiting {
-  background-color: lightcoral;
+  background-color: darksalmon;
   font-weight: bold;
 }
 
