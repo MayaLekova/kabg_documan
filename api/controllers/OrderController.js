@@ -5,6 +5,18 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
+function fold(docs) {
+	var unique = {};
+	for(var d of docs) {
+		unique[d.type] = d;
+	}
+	var ret = [];
+	for(var u in unique) {
+		ret.push(unique[u]);
+	}
+	return ret;
+}
+
 module.exports = {
 	create: function (req, res) {
 		User.find({}, function(err, users) {
@@ -30,7 +42,6 @@ module.exports = {
 
 				orders.forEach(function(order) {
 					Document.find({order: order}, function(err, docs) {
-					console.log('Docs:', docs);
 						if(err) {
 							console.error(err);
 							return res.json([]);
@@ -55,7 +66,7 @@ module.exports = {
 				async.each(orders, function(order, cb) {
 					Document.find({order: order.id}, function(err, docs) {
 						err && cb(err);
-						documents[order.id] = docs;
+						documents[order.id] = req.params.unfold ? docs : fold(docs);
 						cb(null);
 					});
 				}, function(err) {
@@ -66,6 +77,7 @@ module.exports = {
 					return res.view('orders', {
 						orders: orders,
 						documents: documents,
+						unfold: req.params.unfold,
 					});
 				});
 			});

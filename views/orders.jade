@@ -3,7 +3,12 @@ extends ./layout.jade
 block content
   h1(style="text-align:center") Всички поръчки
   div.panel-group
-    div.panel.panel-default
+    div.panel
+      if unfold
+        a(href="/all_orders").btn.btn-default.btn-toolbar Сгъни документите
+      else
+        a(href="/all_orders/unfold").btn.btn-default.btn-toolbar Разгъни документите
+    div.panel.panel-default(style="width: 80%")
       each order in orders
         div.panel-heading
           h4.panel-title

@@ -47,7 +47,7 @@ module.exports = {
       ret += '_';
 
       var d = new Date();
-      ret += (d.getUTCFullYear() + padTo2(d.getUTCMonth()) + padTo2(d.getUTCDate()));
+      ret += (d.getUTCFullYear() + padTo2(d.getUTCMonth() + 1) + padTo2(d.getUTCDate()));
       ret += path.extname(fileStream.filename);
       cb(null, ret);
     } }
