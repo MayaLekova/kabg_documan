@@ -31,9 +31,8 @@ block content
       a(href='/ready_documents').btn.btn-default Виж всички готови документи
   #submit.container
     h3 Качи нови документи
-    +uploadDoc("contract", "договор")
     +uploadDoc("declaration", "декларация", orders)
-    +uploadDoc("order", "поръчка")
     +uploadDoc("protocol", "протокол", orders)
-    +uploadDoc("receipt", "разписка/фактура", orders)
     +uploadDoc("renumerationForm", "СИС", orders)
+    +uploadDoc("receipt", "разписка/фактура", orders)
+    +uploadDoc("contract", "договор")
