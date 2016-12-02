@@ -7,14 +7,14 @@ block content
       each order in orders
         div.panel-heading
           h4.panel-title
-            a(data-toggle="collapse", href="#collapse-#{order.id}")= order.assignee.fullname + ' / ' + new Date(order.assignedOn).toDateString()
+            a(data-toggle="collapse", href="#collapse-#{order.id}")= order.assignee.fullname + ' / ' + new Date(order.assignedOn).toUTCString()
         div(id="collapse-#{order.id}").panel-collapse.collapse
           ul.list-group
             each doc in documents[order.id]
               li(value=doc.id, class=((doc.signedByUser && !doc.signedByAdmin) ||
                 (doc.signedByUser && doc.signedByAdmin && !doc.sent) ||
                 (doc.signedByUser && doc.signedByAdmin && !doc.paid)) ? "waiting" : "ready").list-group-item
-                a(href='/get_document/' + doc.path)= doc.name + ' / ' + new Date(doc.createdAt).toDateString()
+                a(href='/get_document/' + doc.path)= doc.name + ' / ' + new Date(doc.createdAt).toUTCString()
                 |  
                 a(href='/send_document/' + doc.id).btn.btn-xs.btn-success.btn-menu Изпрати
                 |  
