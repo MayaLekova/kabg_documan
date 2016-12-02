@@ -4,7 +4,7 @@ include mixins/upload_doc
 
 block content
   h1(style="text-align:center")= 'Здравей, ' + user.username
-  #notifications.container
+  #notifications.container.board
     h3 Откакто те нямаше, в системата се случи следното:
     ul
       each notif in notifications
@@ -17,19 +17,37 @@ block content
             a(href='/dismiss/' + notif.id).btn.btn-danger Скрий
             |  
             a(href='/update_document/' + notif.doc_id).btn.btn-info Обнови документ
-  #container.container
-    h3 Твоите качени документи:
-    ul
-      each doc in documents
-        li
-          a(href='/get_document/' + doc.path)= doc.name
-    if admin
-      a(href='/unsent_documents').btn.btn-default Виж всички за изпращане в счетоводството
-      br
-      a(href='/unpaid_documents').btn.btn-default Виж всички за плащане
-      br
-      a(href='/ready_documents').btn.btn-default Виж всички готови документи
-  #submit.container
+  .container
+    .row
+      #documents.col-md-6.board
+        h3 Твоите качени документи:
+        ul
+          each doc in documents
+            li
+              a(href='/get_document/' + doc.path)= doc.name
+        if admin
+          a(href='/unsent_documents').btn.btn-default Виж всички за изпращане в счетоводството
+          br
+          a(href='/unpaid_documents').btn.btn-default Виж всички за плащане
+          br
+          a(href='/ready_documents').btn.btn-default Виж всички готови документи
+      #templates.col-md-6.board
+        h3 Образци за документи:
+        ul
+          li
+            a(href='/templates/Contract.docx') Договор
+          li
+            a(href='/templates/Declaration.docx') Декларация
+          li
+            a(href='/templates/Order.docx') Поръчка
+          li
+            a(href='/templates/Protocol.docx') Протокол
+          li
+            a(href='/templates/SIS.txt') Сметка за изплатени суми
+          li
+            a(href='/templates/Receipt.txt') Фактура/разписка
+        
+  #submit.container.board
     h3 Качи нови документи
     +uploadDoc("declaration", "декларация", orders)
     +uploadDoc("protocol", "протокол", orders)

@@ -2,7 +2,7 @@ input[type="file"] {
   display: inline-block;
 }
 
-.container {
+.board {
   padding: 0px 20px 10px 20px;
   border: 2px solid #000;
   border-radius: 10px;
