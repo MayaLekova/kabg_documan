@@ -3,6 +3,7 @@ var google = require('googleapis');
 var googleAuth = require('google-auth-library');
 var fs = require('fs');
 var readline = require('readline');
+var local = require('./config/local');
 var oauth2Client;
 
 // If modifying these scopes, delete your previously saved credentials
@@ -139,7 +140,7 @@ function storeToken(token) {
 
 function uploadFile(file, callback, auth) {
   var drive = google.drive({ version: 'v3', auth: auth });
-  var folderId = '0ByI1YWg4NhowZzBEZ3dBSHNoV0E';
+  var folderId = local.google.documentRoot;
 
   drive.files.create({
     resource: {
