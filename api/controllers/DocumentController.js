@@ -201,7 +201,7 @@ module.exports = {
 
   status: function(req, res) {
     return res.view('status_table', { spreadsheetId: local.google.spreadsheetId });
-  }
+  },
 
 };
 

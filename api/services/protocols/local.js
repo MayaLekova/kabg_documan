@@ -32,6 +32,7 @@ exports.register = function (req, res, next) {
     , facebook = req.param('facebook')
     , skype    = req.param('skype')
     , upwork   = req.param('upwork')
+    , entity   = (req.param('entity') == 'isEntity')
 
   if (!email) {
     req.flash('error', 'Error.Passport.Email.Missing');
@@ -56,6 +57,7 @@ exports.register = function (req, res, next) {
   , facebook : facebook
   , skype    : skype
   , upwork   : upwork
+  , entity   : entity
   }, function (err, user) {
     if (err) {
       if (err.code === 'E_VALIDATION') {

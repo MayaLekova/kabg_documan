@@ -10,7 +10,8 @@ var User = {
     facebook  : { type: 'string' },
     skype  : { type: 'string' },
     upwork  : { type: 'string' },
-    passports : { collection: 'Passport', via: 'user' }
+    passports : { collection: 'Passport', via: 'user' },
+    entity: { type: 'boolean', defaultsTo: false, boolean: true },
   }
 };
 
