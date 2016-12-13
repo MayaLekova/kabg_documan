@@ -36,21 +36,30 @@ block content
         ul
           li
             a(href='/templates/Contract.docx') Договор
-          li
-            a(href='/templates/Declaration.docx') Декларация
+          unless user.entity
+            li
+              a(href='/templates/Declaration.docx') Декларация
           li
             a(href='/templates/Order.docx') Поръчка
           li
             a(href='/templates/Protocol.docx') Протокол
-          li
-            a(href='/templates/SIS.txt') Сметка за изплатени суми
-          li
-            a(href='/templates/Receipt.txt') Фактура/разписка
-        
+          unless user.entity
+            li
+              a(href='/templates/SIS.txt') Сметка за изплатени суми
+            li
+              a(href='/templates/Receipt.txt') Разписка
+          else
+            li
+              a(href='/templates/Receipt.txt') Фактура
+
   #submit.container.board
     h3 Качи нови документи
-    +uploadDoc("declaration", "декларация", orders)
+    unless user.entity
+      +uploadDoc("declaration", "декларация", orders)
     +uploadDoc("protocol", "протокол", orders)
-    +uploadDoc("renumerationForm", "СИС", orders)
-    +uploadDoc("receipt", "разписка/фактура", orders)
+    unless user.entity
+      +uploadDoc("renumerationForm", "СИС", orders)
+      +uploadDoc("receipt", "разписка", orders)
+    else
+      +uploadDoc("receipt", "фактура", orders)
     +uploadDoc("contract", "договор")
