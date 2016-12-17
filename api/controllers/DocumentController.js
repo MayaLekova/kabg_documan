@@ -188,7 +188,12 @@ module.exports = {
   },
   
   unpaid: function (req, res) {
-    Document.find({ paid: false, signedByAdmin: true }).exec(function(err, found) {
+    Document.find({ paid: false, signedByAdmin: true,
+      $or: [
+          { type: 'renumerationForm' },
+          { type: 'receipt' }
+      ]
+    }).exec(function(err, found) {
       return res.view('unpaid', { documents: found });
     });
   },

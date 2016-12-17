@@ -22,7 +22,8 @@ block content
                 a(href='/get_document/' + doc.path)= doc.name + ' / ' + new Date(doc.createdAt).toUTCString()
                 |  
                 a(href='/send_document/' + doc.id).btn.btn-xs.btn-success.btn-menu Изпрати
-                |  
-                a(href='/pay_document/' + doc.id).btn.btn-xs.btn-default.btn-menu Означи като платен
+                if doc.type == 'renumerationForm' || doc.type == 'receipt'
+                  |  
+                  a(href='/pay_document/' + doc.id).btn.btn-xs.btn-default.btn-menu Означи като платен
                 |  
                 a(href='/update_document/' + doc.id).btn.btn-xs.btn-info.btn-menu Обнови

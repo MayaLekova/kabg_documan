@@ -7,5 +7,5 @@ mixin uploadDoc(type, typeReadable, orders)
         span Избери поръчка:
         select(name="orderId")
           each order in orders
-            option(value=order.id)= order.assignee.fullname + '/' + order.assignedOn
+            option(value=order.id)= order.assignee.fullname + '/' + new Date(order.assignedOn).toUTCString()
       input(type="submit", value="Качи " + typeReadable).submit-doc
