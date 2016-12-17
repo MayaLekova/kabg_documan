@@ -12,6 +12,7 @@ var User = {
     upwork  : { type: 'string' },
     passports : { collection: 'Passport', via: 'user' },
     entity: { type: 'boolean', defaultsTo: false, boolean: true },
+    folderId  : { type: 'string' },
   }
 };
 

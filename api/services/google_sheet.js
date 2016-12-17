@@ -5,7 +5,8 @@ getAuth(function(newAuth) {
 });
 
 var google = require('googleapis');
-var spreadsheetId = require('../../config/local.js').google.spreadsheetId;
+var local = require('../../config/local.js');
+var spreadsheetId = local.google.spreadsheetId;
 var key = 'AIzaSyCbtBn8lrWIOH-749Qt71gBqwHcDGLj_E4';
 
 function listFields() {
@@ -33,6 +34,26 @@ function listFields() {
   });
 }
 
+function createFolder(name, cb, parent) {
+  var drive = google.drive({ version: 'v3', auth: auth });
+  var folderId = parent || local.google.documentRoot;
+
+  drive.files.create({
+    resource: {
+      name: name,
+      mimeType: 'application/vnd.google-apps.folder',
+      parents: [folderId]
+    }
+  }, function(err, result) {
+    if(err) {
+      console.error('Error creating folder in Google Drive', err);
+    } else {
+      console.log('Created folder in Google Drive:', result);
+      cb(result.id);
+    }
+  });
+}
+
 function addUser(user, row) {
   var sheets = google.sheets('v4');
   sheets.spreadsheets.values.update({
@@ -51,6 +72,17 @@ function addUser(user, row) {
       console.log('The API returned an error: ' + err);
       return;
     }
+  });
+
+  createFolder(user.username, function(folderId) {
+    User.findOne({username: user.username}, function(err, user) {
+      if(err) {
+        console.error(err);
+        return;
+      }
+      user.folderId = folderId;
+      user.save();
+    });
   });
 }
 
