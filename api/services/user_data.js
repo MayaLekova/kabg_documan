@@ -22,8 +22,9 @@ function addOrder(creator, assignee, orderId, callback) {
 			Order.find(function(err, orders) {
 				var num = orders.length + 1;
 				Order.findOne({id: created.id}).populate('assignee').exec(function(err, order) {
-		    		googleSheet.addOrder(order, num);
-		    		callback(null, order);
+		    		googleSheet.addOrder(order, num, function(err) {
+		    			callback(null, order);
+		    		});
 				})
 			});
 		});

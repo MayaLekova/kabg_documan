@@ -48,9 +48,10 @@ function createFolder(name, cb, parent) {
   }, function(err, result) {
     if(err) {
       console.error('Error creating folder in Google Drive', err);
+      cb(err);
     } else {
       console.log('Created folder in Google Drive:', result);
-      cb(result.id);
+      cb(null, result.id);
     }
   });
 }
@@ -92,7 +93,7 @@ function addUser(user, row) {
     }
   });
 
-  createFolder(user.username, function(folderId) {
+  createFolder(user.username, function(err, folderId) {
     User.findOne({username: user.username}, function(err, user) {
       if(err) {
         console.error(err);
@@ -104,30 +105,38 @@ function addUser(user, row) {
   });
 }
 
-function addOrder(order, row) {
-  var sheets = google.sheets('v4');
-  sheets.spreadsheets.values.update({
-    auth: auth,
-    spreadsheetId: spreadsheetId,
-    range: 'Orders!A' + row + ':L',
-    valueInputOption: 'USER_ENTERED',
-    resource: {
-      "values": [
-        [order.id, order.assignee.fullname, 'не', null, 'не', 'не', 'не', 'не', 'не', 'не', 'не', 'не']
-      ]
-    },
-    key: key,
-  }, function(err, response) {
-    if(err){
-      console.log('The API returned an error: ' + err);
-      return;
-    }
-  });
-
-  createFolder(order.assignedOn.toDateString(), function(folderId) {
-    order.folderId = folderId;
-    order.save();
-  }, order.assignee.folderId);
+function addOrder(order, row, callback) {
+  async.parallel([
+    function(cb) {
+      var sheets = google.sheets('v4');
+      sheets.spreadsheets.values.update({
+        auth: auth,
+        spreadsheetId: spreadsheetId,
+        range: 'Orders!A' + row + ':L',
+        valueInputOption: 'USER_ENTERED',
+        resource: {
+          "values": [
+            [order.id, order.assignee.fullname, 'не', null, 'не', 'не', 'не', 'не', 'не', 'не', 'не', 'не']
+          ]
+        },
+        key: key,
+      }, function(err, response) {
+        cb(err);
+      });
+    }, function(cb) {
+      createFolder(order.assignedOn.toDateString(), function(err, folderId) {
+        order.folderId = folderId;
+        order.save(function(err) {
+          cb(err);
+        });
+      }, order.assignee.folderId);
+    }], function(err, result) {
+      console.log('Calling callback from addOrder');
+      if(err) {
+        console.error('Error from addOrder: ' + err);
+      }
+      callback(err);
+    });
 }
 
 function setContractStatus(username, status) {

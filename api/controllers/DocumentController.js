@@ -72,23 +72,27 @@ module.exports = {
             }
 
             if(req.query.type == 'order' && !created.signedByUser) {
+              var toUser = /\((\w+)\)/.exec(req.body.username)[1];
               userData.addOrder(req.user
-              , /\((\w+)\)/.exec(req.body.username)[1]
+              , toUser
               , created.id
               , function(err, order) {
                 created.order = order.id;
-                created.save();
-
-                Notifications.create({
-                    text: 'Имате нова поръчка от ' + req.user.username + '.',
-                    path: path.basename(files[0].fd),
-                    toUser: order.assignee.username,
-                    doc_id: created.id,
-                    originatedBy: req.user.username
-                  }
-                ).exec(function (err, notifsCreated) {
+                created.save(function(err) {
                   if(err) console.error(err);
-                  // return res.redirect('/');
+                  else userData.addDocument(files[0], created);
+
+                  Notifications.create({
+                      text: 'Имате нова поръчка от ' + req.user.username + '.',
+                      path: path.basename(files[0].fd),
+                      toUser: toUser,
+                      doc_id: created.id,
+                      originatedBy: req.user.username
+                    }
+                  ).exec(function (err, notifsCreated) {
+                    if(err) console.error(err);
+                    // return res.redirect('/');
+                  });
                 });
               });
             }
@@ -99,10 +103,12 @@ module.exports = {
               } else {
                 created.order = req.query.originalOrderId;
               }
-              created.save();
-              setTimeout(function() { // TODO: fix me properly
-                userData.addDocument(files[0], created);
-              }, 1000);
+              created.save(function(err) {
+                if(err) console.error(err);
+                else if(req.query.type != 'order' || created.signedByUser) {
+                  userData.addDocument(files[0], created);
+                }
+              });
             }
 
             if(!created.signedByAdmin) {
