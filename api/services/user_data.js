@@ -1,4 +1,5 @@
 var googleSheet = require('./google_sheet');
+var uploadFile = googleSheet.uploadFile;
 
 function addUser(user) {
 	User.find(function(err, users) {
@@ -29,10 +30,36 @@ function addOrder(creator, assignee, orderId, callback) {
 	});
 }
 
+function upload(file, parentFolder) {
+	uploadFile(file, function(err, result) {
+		if(err) {
+			console.error('Error uploading file to Google Drive', err);
+		} else {
+			console.log('Uploaded file to Google Drive:', result);
+		}
+	}, parentFolder);
+}
+
+function addDocument(file, document) {
+	if(document.type == 'contract') {
+		User.findOne({username: document.owner}, function(err, user) {
+			upload(file, user.folderId);
+		});
+	} else {
+		Order.findOne({id: document.order}, function(err, order) {
+			upload(file, order.folderId);
+		});
+	}
+}
+
 function updateDocStatus(document, status) {
-	Order.find({id: document.order}, function(err, order) {
+	Order.findOne({id: document.order}, function(err, order) {
 		if(err) {
 			console.error('Error from updateDocStatus:', err);
+			return;
+		}
+		if(!order) {
+			console.error('Error from updateDocStatus: order not found, id:', document.order);
 			return;
 		}
 		googleSheet.getOrderPosition(order, document.type, function(col, row) {
@@ -44,5 +71,6 @@ function updateDocStatus(document, status) {
 module.exports = {
 	addUser: addUser,
 	addOrder: addOrder,
+	addDocument: addDocument,
 	updateDocStatus: updateDocStatus,
 };

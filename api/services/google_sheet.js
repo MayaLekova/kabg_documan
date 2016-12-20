@@ -4,6 +4,7 @@ getAuth(function(newAuth) {
   auth = newAuth;
 });
 
+var fs = require('fs');
 var google = require('googleapis');
 var local = require('../../config/local.js');
 var spreadsheetId = local.google.spreadsheetId;
@@ -52,6 +53,23 @@ function createFolder(name, cb, parent) {
       cb(result.id);
     }
   });
+}
+
+function uploadFile(file, callback, parent) {
+  var drive = google.drive({ version: 'v3', auth: auth });
+  var folderId = parent || local.google.documentRoot;
+
+  drive.files.create({
+    resource: {
+      name: file.filename,
+      mimeType: file.type,
+      parents: [folderId]
+    },
+    media: {
+      mimeType: file.type,
+      body: fs.createReadStream(file.fd)
+    }
+  }, callback);
 }
 
 function addUser(user, row) {
@@ -105,6 +123,11 @@ function addOrder(order, row) {
       return;
     }
   });
+
+  createFolder(order.assignedOn.toDateString(), function(folderId) {
+    order.folderId = folderId;
+    order.save();
+  }, order.assignee.folderId);
 }
 
 function setContractStatus(username, status) {
@@ -178,13 +201,16 @@ function getOrderPosition(order, changeType, callback) {
         var row = rows[i];
         if(row[0] == order.id) {
           rowIdx = i;
+          break;
         }
       }
       if(i == rows.length) {
         console.error('Error from getOrderPosition: Order not found, ID:', order.id);
       }
     }
-    callback(col, rowIdx);
+    // +1 for the head row
+    // +1 for 1-based numbering
+    callback(col, rowIdx + 2);
   });
 }
 
@@ -215,5 +241,6 @@ module.exports = {
   addOrder: addOrder,
   setOrderStatus: setOrderStatus,
   getOrderPosition: getOrderPosition,
-  setContractStatus: setContractStatus
+  setContractStatus: setContractStatus,
+  uploadFile: uploadFile,
 };

@@ -9,7 +9,6 @@ var path = require('path');
 var fs = require('fs');
 var local = require('../../config/local.js');
 var ObjectId = require('mongodb').ObjectID;
-var uploadFile = require('../../google_auth').upload;
 var googleSheet = require('../services/google_sheet');
 var mailer = require('../services/mailer');
 var userData = require('../services/user_data');
@@ -68,13 +67,10 @@ module.exports = {
           .exec(function (err, created){
             if(err) return console.error(err);
 
-            uploadFile(files[0], function(err, result) {
-              if(err) {
-                console.error('Error uploading file to Google Drive', err);
-              } else {
-                console.log('Uploaded file to Google Drive:', result);
-              }
-            });
+            if(req.query.type == 'contract') {
+              userData.addDocument(files[0], created);
+            }
+
             if(req.query.type == 'order' && !created.signedByUser) {
               userData.addOrder(req.user
               , /\((\w+)\)/.exec(req.body.username)[1]
@@ -82,6 +78,7 @@ module.exports = {
               , function(err, order) {
                 created.order = order.id;
                 created.save();
+
                 Notifications.create({
                     text: 'Имате нова поръчка от ' + req.user.username + '.',
                     path: path.basename(files[0].fd),
@@ -95,14 +92,19 @@ module.exports = {
                 });
               });
             }
-            if(req.query.type != 'order' && req.query.type != 'contract') {
+
+            if(req.query.type != 'contract') {
               if(!created.signedByAdmin) {
                 created.order = req.body.orderId;
               } else {
                 created.order = req.query.originalOrderId;
               }
-              created.save(); 
+              created.save();
+              setTimeout(function() { // TODO: fix me properly
+                userData.addDocument(files[0], created);
+              }, 1000);
             }
+
             if(!created.signedByAdmin) {
               Notifications.create(local.admins.map(function(adminName) {
                 return {
@@ -119,6 +121,10 @@ module.exports = {
             } else {
               if(req.query.type == 'contract') {
                 googleSheet.setContractStatus(req.query.originalOwner, 'да');
+              } else if(req.query.type == 'order') {
+                if(created.signedByUser) {
+                  userData.updateDocStatus(created, 'да');
+                }
               } else {
                 userData.updateDocStatus(created, 'да');
               }
@@ -138,9 +144,6 @@ module.exports = {
     });
   },
 
-  /**
-   * `DocumentController.upload()`
-   */
   download: function(req, res) {
     var basePath = path.join(__dirname, '../../.tmp/uploads/');
     try {
